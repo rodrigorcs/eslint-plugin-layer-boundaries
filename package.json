@@ -1,0 +1,17 @@
+{
+  "name": "eslint-plugin-layer-boundaries",
+  "version": "1.0.0",
+  "description": "ESLint plugin to enforce layering rules.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint ."
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.27.0",
+    "@typescript-eslint/parser": "^8.27.0",
+    "eslint": "^9.23.0",
+    "typescript": "^5.8.2"
+  }
+}
