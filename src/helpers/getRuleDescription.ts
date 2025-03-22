@@ -5,9 +5,9 @@ export const getRuleDescription = (layer: ELayer) => {
     [ELayer.CONTROLLER]:
       'Controllers cannot import multiple services or repositories. Only import actions or a single service.',
     [ELayer.ACTION]:
-      'Actions cannot import controllers, other actions or repositories. Only import services',
+      'Actions cannot import controllers, other actions or repositories. Only import services.',
     [ELayer.SERVICE]:
-      'Services cannot import controllers, actions or other services. Only import repostories.',
+      'Services cannot import controllers, actions, other services or multiple repostories. Only import a single repository.',
     [ELayer.REPOSITORY]:
       'Repositories cannot import controllers, actions, services or other repositories.',
   }

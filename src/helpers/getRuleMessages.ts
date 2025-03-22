@@ -19,6 +19,8 @@ export const getRuleMessages = (layer: ELayer) => {
       [`${ELayer.SERVICE}/${ELayer.ACTION}`]: 'Services cannot import actions.',
       [`${ELayer.SERVICE}/${ELayer.SERVICE}`]:
         'Services cannot import other services. Use a higher level action to perform cross-domain operations.',
+      [`${ELayer.SERVICE}/${ELayer.REPOSITORY}`]:
+        'Services cannot import multiple repositories. Use a service from another domain.',
     },
     [ELayer.REPOSITORY]: {
       [`${ELayer.REPOSITORY}/${ELayer.CONTROLLER}`]: 'Repositories cannot import controllers.',

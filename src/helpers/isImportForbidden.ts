@@ -14,6 +14,7 @@ export const forbiddenLayersMap = {
     { layer: ELayer.CONTROLLER, maxImports: 0 },
     { layer: ELayer.ACTION, maxImports: 0 },
     { layer: ELayer.SERVICE, maxImports: 0 },
+    { layer: ELayer.REPOSITORY, maxImports: 1 },
   ],
   [ELayer.REPOSITORY]: [
     { layer: ELayer.CONTROLLER, maxImports: 0 },
