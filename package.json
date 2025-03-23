@@ -1,8 +1,11 @@
 {
   "name": "eslint-plugin-layer-boundaries",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "ESLint plugin to enforce layering rules.",
   "license": "MIT",
+  "repository": "https://github.com/rodrigorcs/eslint-plugin-layer-boundaries.git",
+  "homepage": "https://github.com/rodrigorcs/eslint-plugin-layer-boundaries.git",
+  "author": "Rodrigo Costa <rodrigo.costa.ssa@gmail.com>",
   "keywords": [
     "eslint",
     "eslint-plugin",
@@ -12,10 +15,16 @@
     "architecture",
     "boundaries"
   ],
+  "files": [
+    "/dist"
+  ],
   "type": "commonjs",
   "main": "dist/index.js",
   "scripts": {
     "build": "esbuild --platform=node --bundle --minify --legal-comments=none --outfile=dist/index.js src/index.ts",
+    "copy-files": "cp ./README.md ./dist/README.md && cp ./package.json ./dist/package.json && cp ./LICENSE ./dist/LICENSE",
+    "prepare": "yarn build && yarn copy-files",
+    "publish": "yarn prepare && npm publish",
     "lint": "eslint ."
   },
   "devDependencies": {
