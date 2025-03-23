@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-layer-boundaries",
-  "version": "1.1.20",
+  "version": "1.1.21",
   "description": "ESLint plugin to enforce layering rules.",
   "license": "MIT",
   "repository": {
