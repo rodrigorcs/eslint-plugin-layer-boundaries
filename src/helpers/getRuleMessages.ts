@@ -36,7 +36,7 @@ export const getRuleMessages = (layer: ELayer) => {
 
   const messagesWithSuffix: Partial<Record<TLayerPair, string>> = {}
   for (const [layer, message] of Object.entries(messagesObj) as [TLayerPair, string][]) {
-    messagesWithSuffix[layer] = `${message} (in '{{importPath}}').`
+    messagesWithSuffix[layer] = `${message} (see '{{sourcePath}}' importing '{{importPath}}').`
   }
 
   return messagesWithSuffix

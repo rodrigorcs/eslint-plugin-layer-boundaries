@@ -1,34 +1,41 @@
 import { ELayer } from '../models/Layer'
+import { splitPath } from './splitPath'
 
 const importMap = {
   [ELayer.CONTROLLER]: {
     fileDirectory: ['/controllers', 'Controllers'],
-    fileName: ['controller'],
+    fileName: ['Controller'],
   },
   [ELayer.ACTION]: {
     fileDirectory: ['/actions', 'Actions'],
-    fileName: ['action'],
+    fileName: ['Action'],
   },
   [ELayer.SERVICE]: {
     fileDirectory: ['/services', 'Services'],
-    fileName: ['service'],
+    fileName: ['Service'],
   },
   [ELayer.REPOSITORY]: {
     fileDirectory: ['/repositories', 'Repositories'],
-    fileName: ['repository'],
+    fileName: ['Repository'],
   },
 } as const
 
 export function detectLayer(filePath: string): ELayer | null {
-  const lowercasePath = filePath.toLowerCase()
+  const { dir: fileDir, file: fileName } = splitPath(filePath)
 
   for (const layerKey of Object.values(ELayer)) {
-    const { fileDirectory, fileName } = importMap[layerKey]
+    const { fileDirectory: recognizedDirectories, fileName: recognizedFileNames } =
+      importMap[layerKey]
 
-    const matchesDirectory = fileDirectory.some((dir) => lowercasePath.includes(dir.toLowerCase()))
-    const matchesFileName = fileName.some((fname) => lowercasePath.includes(fname.toLowerCase()))
+    const matchesDirectory = recognizedDirectories.some((recognizedDirectory) =>
+      fileDir.includes(recognizedDirectory),
+    )
+    if (matchesDirectory) return layerKey
 
-    if (matchesDirectory || matchesFileName) return layerKey
+    const matchesFileName = recognizedFileNames.some((recognizedFileName) =>
+      fileName.includes(recognizedFileName),
+    )
+    if (matchesFileName) return layerKey
   }
 
   return null

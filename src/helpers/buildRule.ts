@@ -7,6 +7,7 @@ import { isLocalImport } from './isLocalImport'
 import { getLayerMaxImports, isImportLimited } from './isImportLimited'
 import { hasBypassKeywords } from './hasBypassKeywords'
 import { TNode } from '../models/Node'
+import { buildFileShortName } from './buildFileShortName'
 
 type TImportDataByLayerPair = Partial<Record<TLayerPair, { count: number; nodes: TNode[] }>>
 
@@ -70,7 +71,8 @@ export const buildRule: (ruleLayer: ELayer) => Rule.RuleModule = (ruleLayer) => 
                   node,
                   messageId: layerPair,
                   data: {
-                    ...(importPath && { importPath }),
+                    sourcePath: buildFileShortName(context.filename),
+                    ...(importPath && { importPath: buildFileShortName(importPath) }),
                   },
                 })
               }
