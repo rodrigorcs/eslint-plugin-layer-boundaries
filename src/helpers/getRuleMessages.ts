@@ -1,7 +1,7 @@
-import { ELayer } from '../models/Layer'
+import { ELayer, TLayerPair } from '../models/Layer'
 
 export const getRuleMessages = (layer: ELayer) => {
-  const ruleMessagesMap: Record<ELayer, Partial<Record<`${ELayer}/${ELayer}`, string>>> = {
+  const ruleMessagesMap: Record<ELayer, Partial<Record<TLayerPair, string>>> = {
     [ELayer.CONTROLLER]: {
       [`${ELayer.CONTROLLER}/${ELayer.SERVICE}`]:
         'Controllers cannot import multiple services. Use an action instead.',
@@ -34,9 +34,9 @@ export const getRuleMessages = (layer: ELayer) => {
 
   const messagesObj = ruleMessagesMap[layer]
 
-  const messagesWithSuffix: Partial<Record<`${ELayer}/${ELayer}`, string>> = {}
-  for (const [layer, message] of Object.entries(messagesObj)) {
-    messagesWithSuffix[layer as `${ELayer}/${ELayer}`] = `${message} (in '{{importPath}}').`
+  const messagesWithSuffix: Partial<Record<TLayerPair, string>> = {}
+  for (const [layer, message] of Object.entries(messagesObj) as [TLayerPair, string][]) {
+    messagesWithSuffix[layer] = `${message} (in '{{importPath}}').`
   }
 
   return messagesWithSuffix

@@ -4,3 +4,5 @@ export enum ELayer {
   SERVICE = 'service',
   REPOSITORY = 'repository',
 }
+
+export type TLayerPair = `${ELayer}/${ELayer}`

@@ -1,11 +1,14 @@
 import { Rule } from 'eslint'
 import { detectLayer } from './detectLayer'
 import { getRuleDescription } from './getRuleDescription'
-import { ELayer } from '../models/Layer'
+import { ELayer, TLayerPair } from '../models/Layer'
 import { getRuleMessages } from './getRuleMessages'
 import { isLocalImport } from './isLocalImport'
-import { isImportForbidden } from './isImportForbidden'
+import { getLayerMaxImports, isImportLimited } from './isImportLimited'
 import { hasBypassKeywords } from './hasBypassKeywords'
+import { TNode } from '../models/Node'
+
+type TImportDataByLayerPair = Partial<Record<TLayerPair, { count: number; nodes: TNode[] }>>
 
 export const buildRule: (ruleLayer: ELayer) => Rule.RuleModule = (ruleLayer) => {
   return {
@@ -25,7 +28,10 @@ export const buildRule: (ruleLayer: ELayer) => Rule.RuleModule = (ruleLayer) => 
       const currentFileLayer = detectLayer(context.filename)
       if (currentFileLayer !== ruleLayer) return {}
 
+      const importDataByLayerPair: TImportDataByLayerPair = {}
+
       return {
+        // On each import declaration
         ImportDeclaration(node) {
           const importPath = node.source.value?.toString()
           if (!importPath || !isLocalImport(importPath)) return
@@ -36,16 +42,39 @@ export const buildRule: (ruleLayer: ELayer) => Rule.RuleModule = (ruleLayer) => 
           const importHasBypassKeywords = hasBypassKeywords(importPath)
           if (currentFileLayer === importedLayer && importHasBypassKeywords) return
 
-          const isImportedLayerForbidden = isImportForbidden(currentFileLayer, importedLayer)
+          const isImportedLayerLimited = isImportLimited(currentFileLayer, importedLayer)
 
-          if (isImportedLayerForbidden) {
-            context.report({
-              node,
-              messageId: `${currentFileLayer}/${importedLayer}`,
-              data: {
-                importPath,
-              },
-            })
+          if (isImportedLayerLimited) {
+            const layerPair: TLayerPair = `${currentFileLayer}/${importedLayer}`
+            const previousCount = importDataByLayerPair[layerPair]?.count ?? 0
+            const previousNodes = importDataByLayerPair[layerPair]?.nodes ?? []
+
+            importDataByLayerPair[layerPair] = {
+              count: previousCount + 1,
+              nodes: [...previousNodes, node],
+            }
+          }
+        },
+
+        // At the end of the file check
+        'Program:exit': () => {
+          for (const [layerPair, { count, nodes }] of Object.entries(importDataByLayerPair)) {
+            const [source, target] = layerPair.split('/')
+
+            const maxAllowed = getLayerMaxImports(source as ELayer, target as ELayer)
+            if (count > maxAllowed) {
+              for (const node of nodes) {
+                const importPath = node.source.value?.toString()
+
+                context.report({
+                  node,
+                  messageId: layerPair,
+                  data: {
+                    ...(importPath && { importPath }),
+                  },
+                })
+              }
+            }
           }
         },
       }

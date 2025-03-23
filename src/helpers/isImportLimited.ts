@@ -1,6 +1,6 @@
 import { ELayer } from '../models/Layer'
 
-export const forbiddenLayersMap = {
+export const limitedLayersMap = {
   [ELayer.CONTROLLER]: [
     { layer: ELayer.SERVICE, maxImports: 1 },
     { layer: ELayer.REPOSITORY, maxImports: 0 },
@@ -22,17 +22,28 @@ export const forbiddenLayersMap = {
     { layer: ELayer.SERVICE, maxImports: 0 },
     { layer: ELayer.REPOSITORY, maxImports: 0 },
   ],
+} as const
+
+const getLimitedLayers = (importingLayer: ELayer) => {
+  return limitedLayersMap[importingLayer]
 }
 
-const getForbiddenLayers = (importingLayer: ELayer) => {
-  return forbiddenLayersMap[importingLayer]
-}
-
-export const isImportForbidden = (importingLayer: ELayer, importedLayer: string) => {
-  const forbiddenLayers = getForbiddenLayers(importingLayer)
+export const isImportLimited = (importingLayer: ELayer, importedLayer: string) => {
+  const forbiddenLayers = getLimitedLayers(importingLayer)
   const forbiddenLayer = forbiddenLayers.find((layer) => layer.layer === importedLayer)
 
   if (!forbiddenLayer) return false
 
-  return forbiddenLayer.maxImports === 0 // TODO: Support multiple imports maxLimit
+  return true
+}
+
+export const getLayerMaxImports = (importingLayer: ELayer, importedLayer: ELayer) => {
+  const limitedLayers = getLimitedLayers(importingLayer)
+  const limitedLayer = limitedLayers.find(
+    ({ layer: limitedLayer }) => limitedLayer === importedLayer,
+  )
+
+  if (!limitedLayer) return Infinity
+
+  return limitedLayer.maxImports
 }
