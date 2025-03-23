@@ -1,4 +1,4 @@
-import { ELayer } from '../models/Layer'
+import { ELayer } from '../../models/Layer'
 
 export const getRuleDescription = (layer: ELayer) => {
   const ruleDescriptionMap: Record<ELayer, string> = {

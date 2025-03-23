@@ -1,5 +1,5 @@
-import { ELayer } from '../models/Layer'
-import { splitPath } from './splitPath'
+import { ELayer } from '../../models/Layer'
+import { splitPath } from '../common'
 
 const importMap = {
   [ELayer.CONTROLLER]: {

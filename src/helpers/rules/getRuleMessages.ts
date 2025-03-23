@@ -1,4 +1,4 @@
-import { ELayer, TLayerPair } from '../models/Layer'
+import { ELayer, TLayerPair } from '../../models/Layer'
 
 export const getRuleMessages = (layer: ELayer) => {
   const ruleMessagesMap: Record<ELayer, Partial<Record<TLayerPair, string>>> = {

@@ -1,13 +1,14 @@
 import { Rule } from 'eslint'
-import { detectLayer } from './detectLayer'
-import { getRuleDescription } from './getRuleDescription'
-import { ELayer, TLayerPair } from '../models/Layer'
-import { getRuleMessages } from './getRuleMessages'
-import { isLocalImport } from './isLocalImport'
-import { getLayerMaxImports, isImportLimited } from './isImportLimited'
-import { hasBypassKeywords } from './hasBypassKeywords'
+import {
+  detectLayer,
+  getLayerMaxImports,
+  hasBypassKeywords,
+  isImportLimited,
+  isLocalImport,
+} from './imports'
+import { getRuleDescription, getRuleMessages, buildFileShortName } from './rules'
 import { TNode } from '../models/Node'
-import { buildFileShortName } from './buildFileShortName'
+import { ELayer, TLayerPair } from '../models/Layer'
 
 type TImportDataByLayerPair = Partial<Record<TLayerPair, { count: number; nodes: TNode[] }>>
 

@@ -1,5 +1,5 @@
-import { ELayer } from '../models/Layer'
-import { splitPath } from './splitPath'
+import { ELayer } from '../../models/Layer'
+import { splitPath } from '../common'
 
 export const buildFileShortName = (filePath: string): string => {
   const { dir: fileDir, file: fileName } = splitPath(filePath)
