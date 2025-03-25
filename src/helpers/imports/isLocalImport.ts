@@ -1,3 +1,5 @@
 export const isLocalImport = (importPath: string): boolean => {
-  return importPath.startsWith('.') || importPath.startsWith('/')
+  const localImportPrefixes = ['.', '/', '@/']
+
+  return localImportPrefixes.some((prefix) => importPath.startsWith(prefix))
 }
